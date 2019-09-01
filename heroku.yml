@@ -1,9 +1,0 @@
-build:
-  docker:
-    web: Dockerfile
-run:
-  web: gunicorn run:Scan
-  worker:
-    command:
-      - python3 run.py
-    image: web
