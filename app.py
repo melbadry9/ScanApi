@@ -7,7 +7,7 @@ from flask import Flask, jsonify, render_template
 
 from lib.paths.helper import CONFIG
 from lib.core.slack import push_slack
-from lib.db.database import DatabaseHandler
+from lib.db.database import SubDomainData
 from lib.thirdparty.Gasset.asset import main as Gasset
 from lib.core.opp import SubOver, GoBuster, AssetFinder, Amass
 from lib.thirdparty.Sublist3r.sublist3r import main as Sublist3r
@@ -24,6 +24,7 @@ Scan = Flask(__name__)
 Scan.secret_key = config["FLASK"]["secret"]
 
 def main(domain):
+    DB = SubDomainData()
     final_error = list()
     final_list = list()
     temp_file = tempfile.NamedTemporaryFile("w+t", encoding="utf-8")
@@ -71,10 +72,14 @@ def main(domain):
     except Exception as eeeee:
         final_error.append("SubOver: " + str(eeeee))
 
+    DB.insert_domains(final_list)
+    new_subs = DB.new_domains()
+
     #subdomains
     meta_data = {
         "count": len(final_list),
-        "subdomains": final_list,
+        "new_count": len(new_subs),
+        "subdomains": new_subs,
         "takeovers": takeover,
         "errors": final_error
     }
