@@ -21,13 +21,13 @@ def push_slack(hook, string):
         
         # Avoid failure during posting to slack 
         except Exception:
-            slack_logger.error("Posting to slack faild reason: ", exc_info=True)
-            time.sleep(5)
             retry += 1
-
-        # Stop Retrying 
-        if not retry < 5:
-            status = "500"
-            done = True
+            slack_logger.error("Posting to slack faild reason: ", exc_info=True)    
+            # Stop Retrying 
+            if retry > 10:
+                status = "500"
+                done = True
+            # Sleep to avoid rate limit
+            time.sleep(5)
 
     slack_logger.debug("Slack response code {0}".format(status))

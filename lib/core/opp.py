@@ -5,7 +5,8 @@ from ..paths.helper import MEDIUM
 from ..thirdparty.Gasset.asset import main as Gasset
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
 
-logging.getLogger("opp").addHandler(logging.NullHandler())
+opp_logger = logging.getLogger("opp")
+opp_logger.addHandler(logging.NullHandler())
 
 class ProcessBase(object):
     def __init__(self):        
@@ -19,11 +20,11 @@ class ProcessBase(object):
     def extract_data(self):
         data = re.findall(self.pattern, self.result[0].decode("utf-8"))
         error = self.result[1].decode("utf-8")
-        logging.info("Getting {0} result".format(self.name))
+        opp_logger.info("Getting {0} result".format(self.name))
         return {self.name : {"error": error, "data": data}}
     
     def exec_command(self):
-        logging.debug("Starting {0}".format(self.name))
+        opp_logger.debug("Starting {0}".format(self.name))
         self.pro = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.result = self.pro.communicate()
         return self.extract_data()

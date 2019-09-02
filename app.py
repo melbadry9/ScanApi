@@ -5,6 +5,7 @@ import configparser
 import multiprocessing
 from flask import Flask, jsonify, render_template
 
+from lib.core.utils import clean
 from lib.paths.helper import CONFIG
 from lib.core.slack import push_slack
 from lib.db.database import SubDomainData
@@ -12,26 +13,35 @@ from lib.thirdparty.Gasset.asset import main as Gasset
 from lib.core.opp import SubOver, GoBuster, AssetFinder, Amass
 from lib.thirdparty.Sublist3r.sublist3r import main as Sublist3r
 
-
+# Setting logging setting
 logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s [%(levelname)s] [%(name)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.DEBUG)
 logging.getLogger('requests').propagate = False
 logging.getLogger('urllib3').propagate = False
 
+scan_logger = logging.getLogger("ScanApi")
+scan_logger.addHandler(logging.NullHandler())
+
+# Parsing setting
 config = configparser.ConfigParser()
 config.read(str(CONFIG))
 
+# Init flask app
 Scan = Flask(__name__)
 Scan.secret_key = config["FLASK"]["secret"]
 
 def main(domain):
-    DB = SubDomainData()
-    final_error = list()
     final_list = list()
+    final_error = list()
+    DB = SubDomainData(domain)
     temp_file = tempfile.NamedTemporaryFile("w+t", encoding="utf-8")
     
+    scan_logger.info("Enumerating {0} started".format(domain))
+
     # Sublist3r
     try:
+        logging.getLogger("opp").debug("Starting Sublist3r")
         final_list.extend(Sublist3r(domain, 25, savefile=None, ports=None, silent=True, verbose=False, enable_bruteforce=False, engines=None))
+        logging.getLogger("opp").info("Getting Sublist3r result")
     except Exception as e:
         final_error.append("Sublist3r: " + str(e))
     
@@ -59,7 +69,7 @@ def main(domain):
         final_error.append("Amass: " + str(eeee))
 
     # All Subdomains
-    final_list = sorted(set(final_list))
+    final_list = clean(set(final_list))
     for dom in final_list:
         temp_file.writelines(dom + "\n")
     
