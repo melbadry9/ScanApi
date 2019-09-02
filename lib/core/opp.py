@@ -19,11 +19,11 @@ class ProcessBase(object):
     def extract_data(self):
         data = re.findall(self.pattern, self.result[0].decode("utf-8"))
         error = self.result[1].decode("utf-8")
-        logging.info("getting {0} result".format(self.name))
+        logging.info("Getting {0} result".format(self.name))
         return {self.name : {"error": error, "data": data}}
     
     def exec_command(self):
-        logging.debug("starting {0}".format(self.name))
+        logging.debug("Starting {0}".format(self.name))
         self.pro = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.result = self.pro.communicate()
         return self.extract_data()

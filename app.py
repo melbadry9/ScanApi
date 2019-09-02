@@ -1,5 +1,6 @@
 import json
 import logging
+import tempfile
 import configparser
 import multiprocessing
 from flask import Flask, jsonify, render_template
@@ -25,6 +26,7 @@ Scan.secret_key = config["FLASK"]["secret"]
 def main(domain):
     final_error = list()
     final_list = list()
+    temp_file = tempfile.NamedTemporaryFile("w+t", encoding="utf-8")
     
     # Sublist3r
     try:
@@ -57,11 +59,23 @@ def main(domain):
 
     # All Subdomains
     final_list = sorted(set(final_list))
+    for dom in final_list:
+        temp_file.writelines(dom + "\n")
+    
+    # SubOver
+    try:
+        pro_subover = SubOver(temp_file.name)
+        data = pro_subover.exec_command()
+        takeover = data['SubOver']['data']
+        final_error.extend(data['SubOver']['error'])
+    except Exception as eeeee:
+        final_error.append("SubOver: " + str(eeeee))
 
     #subdomains
     meta_data = {
         "count": len(final_list),
         "subdomains": final_list,
+        "takeovers": takeover,
         "errors": final_error
     }
     
