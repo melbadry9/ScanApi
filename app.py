@@ -87,6 +87,7 @@ def main(domain):
 
     #subdomains
     meta_data = {
+        "domain": domain,
         "count": len(final_list),
         "new_count": len(new_subs),
         "subdomains": new_subs,

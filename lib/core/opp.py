@@ -33,7 +33,7 @@ class SubOver(ProcessBase):
     def __init__(self, file):
         ProcessBase.__init__(self)
         self.name = "SubOver"
-        self.command = "subover -t {0} -a -l {1}".format(self.threads, file)
+        self.command = "subover -t {0} -l {1}".format(self.threads, file)
         self.pattern = r"\[31\;1\;4m(\D+)\u001b\[0m\] Takeover Possible At (\S+)"
 
 class GoBuster(ProcessBase):
