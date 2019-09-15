@@ -14,12 +14,10 @@ from lib.thirdparty.Sublist3r.sublist3r import main as Sublist3r
 
 # Setting logging setting
 logging.basicConfig(filename=config['LOGGING']['file_path'], filemode='w', format='%(asctime)s [%(levelname)s] [%(name)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.DEBUG)
-logging.getLogger('opp').propagate = config['LOGGING'].getboolean("opp")
-logging.getLogger('slack').propagate = config['LOGGING'].getboolean("slack")
-logging.getLogger('utils').propagate = config['LOGGING'].getboolean("utils")
-logging.getLogger('asset').propagate = config['LOGGING'].getboolean("asset")
-logging.getLogger('requests').propagate = config['LOGGING'].getboolean("requests")
-logging.getLogger('urllib3').propagate = config['LOGGING'].getboolean("urllib3")
+
+loggers = ['opp', 'slack', 'utils', 'asset', 'requests', 'urllib3']
+for logger in loggers:
+    logging.getLogger(logger).propagate = config['LOGGING'].getboolean(logger)
 
 
 scan_logger = logging.getLogger("ScanApi")
