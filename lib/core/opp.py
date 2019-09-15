@@ -3,7 +3,7 @@ import logging
 import subprocess
 
 from ..core.config import config
-from ..paths.helper import DIR_LIST, DNS_LIST
+from ..paths.setter import DIR_LIST, DNS_LIST
 from ..thirdparty.Gasset.asset import main as Gasset
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
 

@@ -37,7 +37,7 @@ def main(domain):
     scan_logger.info("Enumerating {0} started".format(domain))
 
     # Sublist3r
-    if config['TOOLS'].getboolean(['sublist3r']):
+    if config['TOOLS'].getboolean('sublist3r'):
         try:
             logging.getLogger("opp").debug("Starting Sublist3r")
             final_list.extend(Sublist3r(domain, 25, savefile=None, ports=None, silent=True, verbose=False, enable_bruteforce=False, engines=None))
@@ -48,7 +48,7 @@ def main(domain):
             final_error.append(error_msg)
     
     # Gasset
-    if config['TOOLS'].getboolean(['gasset']):
+    if config['TOOLS'].getboolean('gasset'):
         try:
             final_list.extend(Gasset(domain))
         except Exception as e:
@@ -57,7 +57,7 @@ def main(domain):
             final_error.append(error_msg)
     
     # AssetFinder
-    if config['TOOLS'].getboolean(['assetfinder']):
+    if config['TOOLS'].getboolean('assetfinder'):
         try:
             pro_asset_finder = AssetFinder(domain)
             data = pro_asset_finder.exec_command()
@@ -69,7 +69,7 @@ def main(domain):
             final_error.append(error_msg)
     
     # Amass    
-    if config['TOOLS'].getboolean(['amass']):
+    if config['TOOLS'].getboolean('amass'):
 
         try:
             pro_amass_finder = Amass(domain)
@@ -81,7 +81,7 @@ def main(domain):
             final_error.append(error_msg)
 
     # GoBusterDNS
-    if config['TOOLS'].getboolean(['gobusterDNS']):
+    if config['TOOLS'].getboolean('gobusterDNS'):
         try:
             brute_dns = GoBusterDNS(domain)
             data = brute_dns.exec_command()
@@ -95,7 +95,7 @@ def main(domain):
     final_list = clean(set(final_list))
     
     # SubOver
-    if config['TOOLS'].getboolean(['subover']):
+    if config['TOOLS'].getboolean('subover'):
 
         # Temp file
         temp_file = tempfile.NamedTemporaryFile("w+t", encoding="utf-8")
@@ -126,7 +126,7 @@ def main(domain):
     }
     
     # Slack Notification
-    if config['SLACK'].getboolean(['enabled']):
+    if config['SLACK'].getboolean('enabled'):
         push_slack(config["SLACK"]["hook"] ,json.dumps(meta_data, indent=4))
     
     # Log result
