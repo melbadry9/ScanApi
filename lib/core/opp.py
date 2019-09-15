@@ -1,7 +1,9 @@
 import re
 import logging
 import subprocess
-from ..paths.helper import MEDIUM
+
+from ..core.config import config
+from ..paths.helper import DIR_SMALL, DNS_SMALL
 from ..thirdparty.Gasset.asset import main as Gasset
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
 
@@ -40,7 +42,7 @@ class GoBuster(ProcessBase):
     def __init__(self, domain):
         ProcessBase.__init__(self)
         self.name = "GoBuster"
-        self.command = "gobuster -t {0} -r -l -f -e -q -w {1} -u {2}".format(self.threads, MEDIUM, domain)
+        self.command = "gobuster -t {0} -r -l -f -e -q -w {1} -u {2}".format(self.threads, DIR_SMALL, domain)
         self.pattern = r"(\S+) \(Status: (\d+)\) \[Size: (\d+)\]"
 
 class AssetFinder(ProcessBase):
@@ -56,3 +58,10 @@ class Amass(ProcessBase):
         self.name = "Amass"
         self.command = "amass enum -passive -d {0}".format(domain)
         self.pattern = r"(.+)\n"
+
+class GoBusterDNS(ProcessBase):
+    def __init__(self, domain):
+        ProcessBase.__init__(self)
+        self.name = "GoBusterDNS"
+        self.command = "gobuster dns -z -q -d {0} -r {1} -w {2} -t {3}".format(domain, config['DNS']['resolver'], DNS_SMALL, self.threads)
+        self.pattern = r"Found: (.+)\n"

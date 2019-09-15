@@ -1,14 +1,13 @@
 import json
 import logging
 import tempfile
-import configparser
 import multiprocessing
 from flask import Flask, jsonify, render_template
 
 from lib.core.utils import clean
-from lib.paths.helper import CONFIG
+from lib.core.config import config
 from lib.core.slack import push_slack
-from lib.db.database import SubDomainData
+from lib.core.database import SubDomainData
 from lib.thirdparty.Gasset.asset import main as Gasset
 from lib.core.opp import SubOver, GoBuster, AssetFinder, Amass
 from lib.thirdparty.Sublist3r.sublist3r import main as Sublist3r
@@ -20,10 +19,6 @@ logging.getLogger('urllib3').propagate = False
 
 scan_logger = logging.getLogger("ScanApi")
 scan_logger.addHandler(logging.NullHandler())
-
-# Parsing setting
-config = configparser.ConfigParser()
-config.read(str(CONFIG))
 
 # Init flask app
 Scan = Flask(__name__)

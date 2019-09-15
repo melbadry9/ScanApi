@@ -11,7 +11,7 @@ from urllib.parse import quote
 import requests
 from bs4 import BeautifulSoup as BS
 
-from .cookie import cookie
+from ...core.config import config
 
 asset_logger = logging.getLogger('asset')
 asset_logger.addHandler(logging.NullHandler())
@@ -20,6 +20,7 @@ asset_logger.addHandler(logging.NullHandler())
 class Base(object):
     def __init__(self, domain):
         self.url = ""
+        self.name = ""
         self.BASE_URL =""
         self.done = False
         self.logging = True
@@ -31,7 +32,7 @@ class Base(object):
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.8',
             'Accept-Encoding': 'gzip',
-            'Cookie': cookie['cookie']}
+            'Cookie': config['COOKIE']['fb_cookie']}
         self.fb_url = "https://developers.facebook.com/tools/debug/echo/?q={proxy_url}"
         self.adapter = requests.adapters.HTTPAdapter(5, 10, max_retries=2)
         self.CreateSession()
@@ -76,7 +77,7 @@ class Base(object):
             if retry <= 5:
                 pass
             else:
-                asset_logger.error("{0}: Max retrying n. reached".format(self.name, retry))
+                asset_logger.error("{0}: Max retrying n. reached".format(self.name))
                 done = True
 
 class BaseThreaded(multiprocessing.Process, Base):
@@ -145,7 +146,7 @@ class Censys(BaseThreaded):
         
         
     def Logic(self, _):
-        asset_logger.debug("{0}: Enumerating started".format(self.name))
+        #asset_logger.debug("{0}: Enumerating started".format(self.name))
         for i in range(1,41):
             url = self.BASE_URL.format(domain=self.domain,page=str(i))
             url = self.GetUrl(url)
@@ -156,7 +157,7 @@ class Censys(BaseThreaded):
             th.start()
 
         self.Q.join()
-        asset_logger.debug("{0}: Enumerating finished".format(self.name))
+        #asset_logger.debug("{0}: Enumerating finished".format(self.name))
         
     def SendRequest(self, url):
         done = False
@@ -166,7 +167,7 @@ class Censys(BaseThreaded):
                 if res.status_code == 200:
                     self.ExtractDomains(res.text)
                     done = True
-            except Exception as err:
+            except Exception:
                 asset_logger.error("{0}: ".format(self.name), exc_info=True)
         self.Q.task_done()
 
@@ -236,7 +237,7 @@ class CertSpotter(BaseThreaded):
 def main(domain):
     subdomains_final = multiprocessing.Manager().list()
     
-    if not cookie['cookie'] == "":
+    if not config["COOKIE"]['fb_cookie'] == "":
         active_resources = [Crt, FDNS, VirusTotal, CertSpotter, Censys]
     else:
         asset_logger.error("Facebook cookies not found ignoring Censys, VirusTotal")
