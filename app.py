@@ -30,9 +30,11 @@ Scan = Flask(__name__)
 Scan.secret_key = config["FLASK"]["secret"]
 
 def main(domain):
+    meta_data = {}
     final_list = list()
     final_error = list()
     DB = SubDomainData(domain)
+    meta_data['domain'] = domain
 
     scan_logger.info("Enumerating {0} started".format(domain))
 
@@ -93,6 +95,7 @@ def main(domain):
         
     # All Subdomains
     final_list = clean(set(final_list))
+    meta_data['count'] = len(final_list)
     
     # SubOver
     if config['TOOLS'].getboolean('subover'):
@@ -107,6 +110,7 @@ def main(domain):
             data = pro_subover.exec_command()
             takeover = data['SubOver']['data']
             final_error.extend(data['SubOver']['error'])
+            meta_data['takeovers'] = takeover
         except Exception as e:
             error_msg = "SubOver: " + str(e)
             scan_logger.error(error_msg, exc_info=True)
@@ -114,17 +118,9 @@ def main(domain):
 
     DB.insert_domains(final_list)
     new_subs = DB.new_domains()
+    meta_data['new_count'] = len(new_subs)
+    meta_data['subdomains'] = new_subs
 
-    #subdomains
-    meta_data = {
-        "domain": domain,
-        "count": len(final_list),
-        "new_count": len(new_subs),
-        "subdomains": new_subs,
-        "takeovers": takeover,
-        "errors": final_error
-    }
-    
     # Slack Notification
     if config['SLACK'].getboolean('enabled'):
         push_slack(config["SLACK"]["hook"] ,json.dumps(meta_data, indent=4))
