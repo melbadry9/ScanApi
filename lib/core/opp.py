@@ -3,7 +3,7 @@ import logging
 import subprocess
 
 from ..core.config import config
-from ..paths.helper import DIR_SMALL, DNS_SMALL
+from ..paths.helper import DIR_LIST, DNS_LIST
 from ..thirdparty.Gasset.asset import main as Gasset
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
 
@@ -14,7 +14,7 @@ class ProcessBase(object):
     def __init__(self):        
         self.pro = None
         self.name = None
-        self.threads = 25
+        self.threads = config['GENERAL']['threads']
         self.result = None
         self.command = None
         self.pattern = None
@@ -42,7 +42,7 @@ class GoBuster(ProcessBase):
     def __init__(self, domain):
         ProcessBase.__init__(self)
         self.name = "GoBuster"
-        self.command = "gobuster -t {0} -r -l -f -e -q -w {1} -u {2}".format(self.threads, DIR_SMALL, domain)
+        self.command = "gobuster -t {0} -r -l -f -e -q -w {1} -u {2}".format(self.threads, DIR_LIST, domain)
         self.pattern = r"(\S+) \(Status: (\d+)\) \[Size: (\d+)\]"
 
 class AssetFinder(ProcessBase):
@@ -63,5 +63,5 @@ class GoBusterDNS(ProcessBase):
     def __init__(self, domain):
         ProcessBase.__init__(self)
         self.name = "GoBusterDNS"
-        self.command = "gobuster dns -z -q -d {0} -r {1} -w {2} -t {3}".format(domain, config['DNS']['resolver'], DNS_SMALL, self.threads)
+        self.command = "gobuster dns -z -q -d {0} -r {1} -w {2} -t {3}".format(domain, config['GENERAL']['resolver'], DNS_LIST, self.threads)
         self.pattern = r"Found: (.+)\n"
