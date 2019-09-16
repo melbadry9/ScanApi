@@ -42,3 +42,7 @@ docker run -d -p 8000:8000 scanapi
 - Add directory brute forcing monitoring.
 - Add open ports monitoring.
 - Add scheduling jobs.
+
+## Donation
+
+[![Coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://buymeacoffee.com/melbadry9)
