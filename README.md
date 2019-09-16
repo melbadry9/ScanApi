@@ -10,7 +10,7 @@ Subdomains-enumeration and subdomain-takeover monitoring api.
 git clone https://github.com/melbadry9/ScanApi.git
 cd ScanApi
 sudo bash install.sh
-pyhton3 app.py
+python3 app.py
 ```
 
 - Docker
