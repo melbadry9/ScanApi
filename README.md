@@ -22,7 +22,7 @@ docker run -d -p 8000:8000 scanapi
 
 - Add slack hook in `config.ini`
 
-- For custom options edit config.ini
+- For custom options edit `config.ini`
 
 ## Running  
 
@@ -32,7 +32,7 @@ docker run -d -p 8000:8000 scanapi
 
 - [Amass](https://github.com/OWASP/Amass)
 - [Gasset](https://github.com/melbadry9/gasset)
-- [Subver](https://github.com/melbadry9/SubOver)
+- [Subover](https://github.com/melbadry9/SubOver)
 - [Sublist3r](https://github.com/melbadry9/Sublist3r)
 - [Gobuster](https://github.com/OJ/gobuster)
 - [Assetfinder](https://github.com/tomnomnom/assetfinder)
