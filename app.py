@@ -116,8 +116,15 @@ def main(domain):
 
     DB.insert_domains(final_list)
     new_subs = DB.new_domains()
-    meta_data['new_count'] = len(new_subs)
-    meta_data['subdomains'] = new_subs
+
+    # Bypass first run 
+    if not len(new_subs) == len(final_list):
+        meta_data['new_count'] = len(new_subs)
+        meta_data['subdomains'] = new_subs
+
+    # Add Errors
+    if len(final_error) > 0:
+        meta_data['errors'] = final_error
 
     # Slack Notification
     if config['SLACK'].getboolean('enabled'):
