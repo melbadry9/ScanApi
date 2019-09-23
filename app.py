@@ -106,7 +106,7 @@ def main(domain):
             pro_subover = SubOver(temp_file.name)
             data = pro_subover.exec_command()
             takeover = data['SubOver']['data']
-            final_error.appand(data['SubOver']['error'])
+            final_error.append(data['SubOver']['error'])
             meta_data['takeovers'] = takeover
         except Exception as e:
             error_msg = "SubOver: " + str(e)
