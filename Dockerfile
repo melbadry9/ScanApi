@@ -6,7 +6,7 @@ COPY . /ScanApi
 WORKDIR /ScanApi
 RUN pip3 install -r requirements.txt
 RUN go get -u github.com/melbadry9/subover
-#RUN go get -u github.com/OJ/gobuster
+RUN go get -u github.com/OJ/gobuster
 RUN go get -u github.com/tomnomnom/assetfinder
 ENV GOROOT=/root/go GOPATH=/go PATH=/root/go/bin:$PATH
 RUN wget https://github.com/OWASP/Amass/releases/download/v3.0.27/amass_v3.0.27_linux_amd64.zip

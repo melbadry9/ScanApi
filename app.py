@@ -62,7 +62,7 @@ def main(domain):
             pro_asset_finder = AssetFinder(domain)
             data = pro_asset_finder.exec_command()
             final_list.extend(data['AssetFinder']['data'])
-            final_error.extend(data['AssetFinder']['error'])
+            final_error.append(data['AssetFinder']['error'])
         except Exception as e:
             error_msg = "AssetFinder: " + str(e)
             scan_logger.error(error_msg, exc_info=True)
@@ -70,7 +70,6 @@ def main(domain):
     
     # Amass    
     if config['TOOLS'].getboolean('amass'):
-
         try:
             pro_amass_finder = Amass(domain)
             data = pro_amass_finder.exec_command()
@@ -107,7 +106,7 @@ def main(domain):
             pro_subover = SubOver(temp_file.name)
             data = pro_subover.exec_command()
             takeover = data['SubOver']['data']
-            final_error.extend(data['SubOver']['error'])
+            final_error.appand(data['SubOver']['error'])
             meta_data['takeovers'] = takeover
         except Exception as e:
             error_msg = "SubOver: " + str(e)

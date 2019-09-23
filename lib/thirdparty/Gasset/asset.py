@@ -139,11 +139,10 @@ class FDNS(BaseThreaded):
             return False
 
 class Censys(BaseThreaded):
+    Q = queue.Queue()
     def __init__(self, domain, shared=None):
         BaseThreaded.__init__(self, domain, shared)
         self.BASE_URL = 'https://censys.io/certificates/_search?q={domain}&page={page}'
-        self.Q = queue.Queue()
-        
         
     def Logic(self, _):
         #asset_logger.debug("{0}: Enumerating started".format(self.name))
