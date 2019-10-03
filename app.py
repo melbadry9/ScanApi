@@ -2,7 +2,7 @@ import json
 import logging
 import tempfile
 import multiprocessing
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, Response
 
 from lib.core.utils import clean
 from lib.core.config import config
@@ -141,6 +141,13 @@ def index():
 def Subdomain_enumeration(domain):
     multiprocessing.Process(target=main, args=(domain,)).start()
     return jsonify({"status": 200})
+
+@Scan.route("/db/<domain>/")
+def Subdomain_from_db(domain):
+    DB = SubDomainData(domain)
+    subs = DB.read_domains()
+    resonse = '\n'.join(subs)
+    return Response(resonse,200,mimetype="text/plain")
 
 if __name__ == "__main__":
     options = config["FLASK"]
