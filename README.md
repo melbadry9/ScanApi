@@ -26,7 +26,10 @@ docker run -d -p 8000:8000 scanapi
 
 ## Running  
 
-- Open `http://127.0.0.1:8000/enum/example.com/` in your browser.
+- Open `http://127.0.0.1:8000/enum/domain/example.com/` in your browser.
+- Get Result `http://127.0.0.1:8000/db/domain/example.com/`.
+- S3 Scanner `http://127.0.0.1:8000/enum/s3/bucket-name/`
+- S3 Result `http://127.0.0.1:8000/db/s3/bucket-name/`
 
 ## Supported Tools
 
