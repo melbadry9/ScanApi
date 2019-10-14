@@ -9,6 +9,6 @@ RUN go get -u github.com/melbadry9/subover
 RUN go get -u github.com/OJ/gobuster
 RUN go get -u github.com/tomnomnom/assetfinder
 ENV GOROOT=/root/go GOPATH=/go PATH=/root/go/bin:$PATH
-RUN wget https://github.com/OWASP/Amass/releases/download/v3.0.27/amass_v3.0.27_linux_amd64.zip
-RUN unzip -j amass_v3.0.27_linux_amd64.zip amass_v3.0.27_linux_amd64/amass -d ${GOROOT}/bin/
+RUN wget wget https://github.com/OWASP/Amass/releases/download/v3.1.10/amass_v3.1.10_linux_amd64.zip;
+RUN unzip -j amass_v3.1.10_linux_amd64.zip amass_v3.1.10_linux_amd64/amass -d ${GOROOT}/bin/
 CMD ["gunicorn", "-b", "0.0.0.0:8000", "app:Scan"]
