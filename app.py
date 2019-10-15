@@ -1,6 +1,6 @@
 import json
 import multiprocessing
-from flask import Flask, jsonify, render_template, Response
+from flask import Flask, jsonify, render_template, Response, request
 
 import lib.core.log_handler
 from lib.core.config import config
@@ -30,7 +30,8 @@ def S3_check(bucket):
 
 @Scan.route("/db/domain/<domain>/")
 def Subdomain_from_db(domain):
-    return Response(get_subdomains(domain),200,mimetype="text/plain")
+    protocol = request.args.get("pro") or ""
+    return Response(get_subdomains(domain, protocol),200,mimetype="text/plain")
 
 @Scan.route("/db/s3/<bucket>/")
 def s3_from_db(bucket):

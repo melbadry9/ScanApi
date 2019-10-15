@@ -75,7 +75,7 @@ class SubDomainData(DataBase):
     
     def create_db(self):
         with self.lock:
-            self.cdb.executescript("""CREATE TABLE IF NOT EXISTS "domains" ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `main_domain` TEXT NOT NULL , `sub_domain` TEXT )""")
+            self.cdb.executescript("""CREATE TABLE IF NOT EXISTS "domains" ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `main_domain` TEXT NOT NULL, `sub_domain` TEXT, `http` INTEGER NOT NULL DEFAULT 0, `https` INTEGER NOT NULL DEFAULT 0 )""")
             self.db.commit()
 
     def insert_domains(self, sub_domain:list):
@@ -89,5 +89,21 @@ class SubDomainData(DataBase):
         self.cdb.execute("select sub_domain from domains where main_domain = ?",(self.domain,))
         return [i[0] for i in self.cdb.fetchall()]
 
+    def update_protocol(self, protocol:str, sub_domain:list):
+        with self.lock:
+            for item in sub_domain:
+                if protocol == "http":
+                    self.cdb.execute("update domains set  http = 1 where sub_domain = ?",(item,))
+                elif protocol == "https":
+                    self.cdb.execute("update domains set  https = 1 where sub_domain = ?",(item,))
+            self.db.commit()
+
+    def read_domains_protocol(self, protocol:str):
+        if protocol == "http":
+            self.cdb.execute("select sub_domain from domains where main_domain = ? and http=1",(self.domain,))
+        elif protocol == "https":
+            self.cdb.execute("select sub_domain from domains where main_domain = ? and https=1",(self.domain,))
+        return [i[0] for i in self.cdb.fetchall()]
+    
     def new_domains(self):
         return list(set(self.read_domains()) - set(self.old_sub))

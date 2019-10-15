@@ -8,8 +8,8 @@ from ..core.slack import push_slack
 from ..core.database import SubDomainData
 from ..core.log_handler import scan_logger
 from ..thirdparty.Gasset.asset import main as Gasset
-from ..core.opp import SubOver, GoBuster, AssetFinder, Amass, GoBusterDNS
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
+from ..core.opp import SubOver, GoBuster, AssetFinder, Amass, GoBusterDNS, Httprobe
 
 
 def sub_job(domain):
@@ -78,15 +78,15 @@ def sub_job(domain):
     # All Subdomains
     final_list = clean(set(final_list))
     meta_data['count'] = len(final_list)
-    
+
+     # Temp file
+    temp_file = tempfile.NamedTemporaryFile("w+t", encoding="utf-8", delete=False)
+    for item in final_list:
+        temp_file.writelines(item + "\n")
+    temp_file.seek(0)
+
     # SubOver
     if config['TOOLS'].getboolean('subover'):
-
-        # Temp file
-        temp_file = tempfile.NamedTemporaryFile("w+t", encoding="utf-8")
-        for dom in final_list:
-            temp_file.writelines(dom + "\n")
-
         try:
             pro_subover = SubOver(temp_file.name)
             data = pro_subover.exec_command()
@@ -98,15 +98,31 @@ def sub_job(domain):
             error_msg = "SubOver: " + str(e)
             scan_logger.error(error_msg, exc_info=True)
             final_error.append(error_msg)
-
+    
     DB.insert_domains(final_list)
     new_subs = DB.new_domains()
 
-    # Bypass first run 
+    # Httprobe
+    if config['TOOLS'].getboolean('httprobe'):
+        try:
+            http_probe = Httprobe(temp_file.name)
+            data = http_probe.exec_command()
+            alive_data = data['Httprobe']['data']
+            https_domain = [dom.replace("https://","") for dom in alive_data if dom.startswith("https://")]
+            http_domain = [dom.replace("http://","") for dom in alive_data if dom.startswith("http://")]
+            DB.update_protocol("http", http_domain)
+            DB.update_protocol("https", https_domain)
+        except Exception as e:
+            error_msg = "Httprobe: " + str(e)
+            scan_logger.error(error_msg, exc_info=True)
+            final_error.append(error_msg)
+
+    # Bypass first run and  avoid huge host on slack webhook
     if not len(new_subs) == len(final_list):
         if not len(new_subs) == 0:
             meta_data['new_count'] = len(new_subs)
-            meta_data['subdomains'] = new_subs
+            if not len(new_subs) > 200:
+                meta_data['subdomains'] = new_subs
 
     # Add Errors
     if len(set(final_error) - {""}) > 0:
@@ -120,7 +136,12 @@ def sub_job(domain):
     scan_logger.info(json.dumps(meta_data, indent=4))
     return meta_data
 
-def get_subdomains(domain):
+def get_subdomains(domain, protocol):
     DB = SubDomainData(domain)
-    subs = DB.read_domains()
+    if protocol == "http":
+        subs = DB.read_domains_protocol("http")
+    elif protocol == "https":
+        subs = DB.read_domains_protocol("https")
+    else:
+        subs = DB.read_domains()
     return '\n'.join(subs)
