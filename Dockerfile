@@ -8,7 +8,8 @@ RUN pip3 install -r requirements.txt
 RUN go get -u github.com/melbadry9/subover
 RUN go get -u github.com/OJ/gobuster
 RUN go get -u github.com/tomnomnom/assetfinder
+RUN go get -u github.com/tomnomnom/httprobe
 ENV GOROOT=/root/go GOPATH=/go PATH=/root/go/bin:$PATH
-RUN wget wget https://github.com/OWASP/Amass/releases/download/v3.1.10/amass_v3.1.10_linux_amd64.zip;
+RUN wget https://github.com/OWASP/Amass/releases/download/v3.1.10/amass_v3.1.10_linux_amd64.zip
 RUN unzip -j amass_v3.1.10_linux_amd64.zip amass_v3.1.10_linux_amd64/amass -d ${GOROOT}/bin/
 CMD ["gunicorn", "-b", "0.0.0.0:8000", "app:Scan"]

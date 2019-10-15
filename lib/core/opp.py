@@ -65,3 +65,10 @@ class GoBusterDNS(ProcessBase):
         self.name = "GoBusterDNS"
         self.command = "gobuster dns -z -q -d {0} -r {1} -w {2} -t {3}".format(domain, config['GENERAL']['resolver'], DNS_LIST, self.threads)
         self.pattern = r"Found: (.+)\n"
+
+class Httprobe(ProcessBase):
+    def __init__(self, file):
+        ProcessBase.__init__(self)
+        self.name = "Httprobe"
+        self.command = "cat {0} | httprobe -c {1}".format(file, self.threads)
+        self.pattern = r"(.+)\n"
