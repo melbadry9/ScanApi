@@ -138,6 +138,29 @@ class FDNS(BaseThreaded):
         else:
             return False
 
+class Shodan(BaseThreaded):
+    def __init__(self, domain, shared=None):
+        BaseThreaded.__init__(self, domain, shared)
+        self.BASE_URL = "https://beta.shodan.io/domain/{domain}"
+        self.url = self.BASE_URL.format(domain=domain)
+
+    def SendRequest(self, url):
+        return self.session.get(url, stream=True)
+
+    def HandleResponse(self, res):
+        sc = res.status_code
+        if sc == 200:
+            res = BS(res.text,"lxml")
+            domains = res.find_all("ul",{"id": "subdomains"})[0].find_all("li")
+            for dom in domains:
+                dom_name = "{0}.{1}"
+                dom_full = dom_name.format(dom.text.replace("*.","09."),self.domain)
+                self.domains.append(dom_full)
+            self.done = True
+            return True
+        else:
+            return False
+
 class Censys(BaseThreaded):
     Q = queue.Queue()
     def __init__(self, domain, shared=None):
@@ -237,10 +260,10 @@ def main(domain):
     subdomains_final = multiprocessing.Manager().list()
     
     if not config["COOKIE"]['fb_cookie'] == "":
-        active_resources = [Crt, FDNS, VirusTotal, CertSpotter, Censys]
+        active_resources = [Crt, FDNS, Shodan, VirusTotal, CertSpotter, Censys]
     else:
         asset_logger.error("Facebook cookies not found ignoring Censys, VirusTotal")
-        active_resources = [Crt, FDNS, CertSpotter]
+        active_resources = [Crt, FDNS, CertSpotter, Shodan]
 
     threads = [resource(domain, subdomains_final) for resource in active_resources]
     for thread in threads:
