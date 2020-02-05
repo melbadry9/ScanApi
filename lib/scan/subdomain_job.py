@@ -9,7 +9,7 @@ from ..core.database import SubDomainData
 from ..core.log_handler import scan_logger
 from ..thirdparty.Gasset.asset import main as Gasset
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
-from ..core.opp import SubOver, GoBuster, AssetFinder, Amass, GoBusterDNS, Httprobe
+from ..core.opp import SubOver, GoBuster, AssetFinder, Amass, GoBusterDNS, Httprobe, Findomain, Subfinder
 
 
 def sub_job(domain):
@@ -50,6 +50,30 @@ def sub_job(domain):
             final_error.append(data['AssetFinder']['error'])
         except Exception as e:
             error_msg = "AssetFinder: " + str(e)
+            scan_logger.error(error_msg, exc_info=True)
+            final_error.append(error_msg)
+
+    # Findomain
+    if config['TOOLS'].getboolean('findomain'):
+        try:
+            pro_findomain_finder = Findomain(domain)
+            data = pro_findomain_finder.exec_command()
+            final_list.extend(data['Findomain']['data'])
+            final_error.append(data['Findomain']['error'])
+        except Exception as e:
+            error_msg = "Findomain: " + str(e)
+            scan_logger.error(error_msg, exc_info=True)
+            final_error.append(error_msg)
+    
+    # Subfinder
+    if config['TOOLS'].getboolean('subfinder'):
+        try:
+            pro_subfinder_finder = Subfinder(domain)
+            data = pro_subfinder_finder.exec_command()
+            final_list.extend(data['Subfinder']['data'])
+            final_error.append(data['Subfinder']['error'])
+        except Exception as e:
+            error_msg = "Subfinder: " + str(e)
             scan_logger.error(error_msg, exc_info=True)
             final_error.append(error_msg)
     
@@ -112,6 +136,7 @@ def sub_job(domain):
             http_domain = [dom.replace("http://","") for dom in alive_data if dom.startswith("http://")]
             DB.update_protocol("http", http_domain)
             DB.update_protocol("https", https_domain)
+            DB.Save()
         except Exception as e:
             error_msg = "Httprobe: " + str(e)
             scan_logger.error(error_msg, exc_info=True)

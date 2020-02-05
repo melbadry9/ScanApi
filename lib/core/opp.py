@@ -4,8 +4,6 @@ import subprocess
 
 from ..core.config import config
 from ..paths.setter import DIR_LIST, DNS_LIST
-from ..thirdparty.Gasset.asset import main as Gasset
-from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
 
 opp_logger = logging.getLogger("opp")
 opp_logger.addHandler(logging.NullHandler())
@@ -57,6 +55,20 @@ class Amass(ProcessBase):
         ProcessBase.__init__(self)
         self.name = "Amass"
         self.command = "amass enum -passive -d {0}".format(domain)
+        self.pattern = r"(.+)\n"
+
+class Findomain(ProcessBase):
+    def __init__(self, domain):
+        ProcessBase.__init__(self)
+        self.name = "Findomain"
+        self.command = "findomain -t {0} -q".format(domain)
+        self.pattern = r"(.+)\n"
+
+class Subfinder(ProcessBase):
+    def __init__(self, domain):
+        ProcessBase.__init__(self)
+        self.name = "Subfinder"
+        self.command = "subfinder -d {0} -silent".format(domain)
         self.pattern = r"(.+)\n"
 
 class GoBusterDNS(ProcessBase):

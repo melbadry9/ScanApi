@@ -6,6 +6,7 @@ from .config import config
 logging.basicConfig(filename=config['LOGGING']['file_path'], filemode='w', format='%(asctime)s [%(levelname)s] [%(name)s] %(message)s', datefmt='%d-%b-%y %H:%M:%S', level=logging.DEBUG)
 
 loggers = [
+    'db',
     's3', 
     'opp', 
     'slack', 

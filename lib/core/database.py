@@ -1,11 +1,13 @@
-import os
 import json
 import sqlite3
+import logging
 
-from pathlib2 import Path
 from threading import Lock
 from ..paths.helper import DB_FILE
 
+
+database = logging.getLogger("db")
+database.addHandler(logging.NullHandler())
 
 class DataBase(object):
     lock = Lock()
@@ -72,18 +74,21 @@ class SubDomainData(DataBase):
 
     def __del__(self):
         self.db.close()
+
+    def Save(self):
+        self.db.commit()
     
     def create_db(self):
         with self.lock:
             self.cdb.executescript("""CREATE TABLE IF NOT EXISTS "domains" ( `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE, `main_domain` TEXT NOT NULL, `sub_domain` TEXT, `http` INTEGER NOT NULL DEFAULT 0, `https` INTEGER NOT NULL DEFAULT 0 )""")
-            self.db.commit()
+            self.Save()
 
     def insert_domains(self, sub_domain:list):
         with self.lock:
             for item in sub_domain:
                 if item not in self.old_sub:
                     self.cdb.execute("insert into domains (main_domain,sub_domain) values (?,?)",(self.domain,item))
-            self.db.commit()
+            self.Save()
 
     def read_domains(self):
         self.cdb.execute("select sub_domain from domains where main_domain = ?",(self.domain,))
@@ -91,12 +96,18 @@ class SubDomainData(DataBase):
 
     def update_protocol(self, protocol:str, sub_domain:list):
         with self.lock:
-            for item in sub_domain:
-                if protocol == "http":
-                    self.cdb.execute("update domains set  http = 1 where sub_domain = ?",(item,))
-                elif protocol == "https":
-                    self.cdb.execute("update domains set  https = 1 where sub_domain = ?",(item,))
-            self.db.commit()
+            done = False
+            while not done:
+                try:
+                    for item in sub_domain:
+                        if protocol == "http":
+                            self.cdb.execute("update domains set  http = 1 where sub_domain = ?",(item,))
+                        elif protocol == "https":
+                            self.cdb.execute("update domains set  https = 1 where sub_domain = ?",(item,))
+                    done = True
+                except Exception as e:
+                    database.error("Error while updateing db\n {0}".format(e), stack_info=True)
+
 
     def read_domains_protocol(self, protocol:str):
         if protocol == "http":

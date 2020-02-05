@@ -145,6 +145,7 @@ class Shodan(BaseThreaded):
         self.url = self.BASE_URL.format(domain=domain)
 
     def SendRequest(self, url):
+        self.HEADERS['Cookie'] = config["COOKIE"]["shodan"]
         return self.session.get(url, stream=True)
 
     def HandleResponse(self, res):

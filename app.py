@@ -1,8 +1,6 @@
-import json
 import multiprocessing
 from flask import Flask, jsonify, render_template, Response, request
 
-import lib.core.log_handler
 from lib.core.config import config
 from lib.scan.s3_job import s3_job, get_s3
 from lib.scan.subdomain_job import sub_job, get_subdomains

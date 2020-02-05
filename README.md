@@ -52,6 +52,8 @@ docker run -d -p 8000:8000 scanapi
 
 - [Amass](https://github.com/OWASP/Amass)
 - [Gasset](https://github.com/melbadry9/gasset)
+- [Findomain](https://github.com/Edu4rdSHL/findomain)
+- [Subfinder](https://github.com/projectdiscovery/subfinder)
 - [Subover](https://github.com/melbadry9/SubOver)
 - [Sublist3r](https://github.com/melbadry9/Sublist3r)
 - [Httprobe](https://github.com/tomnomnom/httprobe)
