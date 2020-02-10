@@ -1,4 +1,4 @@
-# ScanApi ![Python 3.5](https://img.shields.io/badge/Python-3.x-blue.svg) ![linux 64-bit](https://img.shields.io/badge/Linux-64bit-blue.svg)
+# ScanApi ![Python 3.5](https://img.shields.io/badge/Python-3.x-blue.svg) ![linux 64-bit](https://img.shields.io/badge/Linux-64bit-blue.svg) [![Total alerts](https://img.shields.io/lgtm/alerts/g/melbadry9/ScanApi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/melbadry9/ScanApi/alerts/) [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/melbadry9/ScanApi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/melbadry9/ScanApi/context:python)
 
 Subdomains-enumeration, subdomain-takeover monitoring api and S3 bucket scanner.
 
