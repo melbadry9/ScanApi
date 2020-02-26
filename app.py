@@ -3,6 +3,7 @@ from flask import Flask, jsonify, render_template, Response, request
 
 from lib.core.config import config
 from lib.scan.s3_job import s3_job, get_s3
+from lib.scan.takeover_job import takeover
 from lib.scan.subdomain_job import sub_job, get_subdomains
 
 
@@ -13,6 +14,11 @@ Scan.secret_key = config["FLASK"]["secret"]
 @Scan.route("/")
 def index():
     return render_template("active.html")
+
+@Scan.route("/scan/domain/<domain>/")
+def subdomain_takeover(domain):
+    multiprocessing.Process(target=takeover, args=(domain,)).start()
+    return jsonify({"status": 200})
 
 @Scan.route("/enum/domain/<domain>/")
 def Subdomain_enumeration(domain):

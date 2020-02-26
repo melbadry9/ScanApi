@@ -48,6 +48,10 @@ docker run -d -p 8000:8000 scanapi
 6. `/db/s3/<bucket-name>/`
     - Retrieve s3 bucket scanner data from db if any exist
 
+7. `/scan/domain/<domain>/`
+    - Start scanning for possible subdomain takeover depending on db
+    - Domain ex: `example.com`
+
 ## Supported Tools
 
 - [Amass](https://github.com/OWASP/Amass)

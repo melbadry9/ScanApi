@@ -12,6 +12,7 @@ loggers = [
     'slack', 
     'utils', 
     'asset', 
+    'takeover',
     'requests',
     'urllib3', 
     'botocore', 
