@@ -101,13 +101,13 @@ class SubDomainData(DataBase):
                 try:
                     for item in sub_domain:
                         if protocol == "http":
-                            self.cdb.execute("update domains set  http = 1 where sub_domain = ?",(item,))
+                            self.cdb.execute("update domains set http = 1 where sub_domain = ?",(item,))
                         elif protocol == "https":
-                            self.cdb.execute("update domains set  https = 1 where sub_domain = ?",(item,))
+                            self.cdb.execute("update domains set https = 1 where sub_domain = ?",(item,))
                     done = True
                 except Exception as e:
                     database.error("Error while updateing db\n {0}".format(e), stack_info=True)
-
+        self.Save()
 
     def read_domains_protocol(self, protocol:str):
         if protocol == "http":
