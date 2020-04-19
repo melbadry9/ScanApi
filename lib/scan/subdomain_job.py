@@ -7,7 +7,6 @@ from ..core.config import config
 from ..core.slack import push_slack
 from ..core.database import SubDomainData
 from ..core.log_handler import scan_logger
-from ..thirdparty.one4all.oneforall import OneForAll
 from ..thirdparty.Gasset.asset import main as Gasset
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
 from ..core.opp import SubOver, GoBuster, AssetFinder, Amass, GoBusterDNS, Httprobe, Findomain, Subfinder
@@ -21,18 +20,6 @@ def sub_job(domain):
     meta_data['domain'] = domain
 
     scan_logger.info("Enumerating {0} started".format(domain))
-
-    # Amass    
-    if config['TOOLS'].getboolean('one4all'):
-        try:
-            logging.getLogger("opp").debug("Starting OneForAll")
-            one4_class = OneForAll(domain, brute=False, dns=False, req=False, valid=False, takeover=False)
-            final_list.extend([result['subdomain' ]for result in one4_class.datas])
-            logging.getLogger("opp").info("Getting OneForAll result")
-        except Exception as e:
-            error_msg = "OneForAll: " + str(e)
-            scan_logger.error(error_msg, exc_info=True)
-            final_error.append(error_msg)
 
     # Sublist3r
     if config['TOOLS'].getboolean('sublist3r'):
