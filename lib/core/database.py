@@ -1,3 +1,4 @@
+import time
 import json
 import sqlite3
 import logging
@@ -87,7 +88,15 @@ class SubDomainData(DataBase):
         with self.lock:
             for item in sub_domain:
                 if item not in self.old_sub:
-                    self.cdb.execute("insert into domains (main_domain,sub_domain) values (?,?)",(self.domain,item))
+                    done = False
+                    while not done:
+                        try:
+                            self.cdb.execute("insert into domains (main_domain,sub_domain) values (?,?)",(self.domain,item))
+                            done = True
+                        except sqlite3.OperationalError:
+                            database.error("Error db is locked\n")
+                            time.sleep(5)
+                        
             self.Save()
 
     def read_domains(self):
@@ -107,6 +116,7 @@ class SubDomainData(DataBase):
                     done = True
                 except Exception as e:
                     database.error("Error while updateing db\n {0}".format(e), stack_info=True)
+                    time.sleep(5)
         self.Save()
 
     def read_domains_protocol(self, protocol:str):
