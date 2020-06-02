@@ -22,7 +22,6 @@ def sub_job(domain):
     meta_data = {}
     final_list = list()
     final_error = list()
-    DB = SubDomainData(domain)
     meta_data['domain'] = domain
 
     scan_logger.info("Enumerating {0} started".format(domain))
@@ -128,21 +127,29 @@ def sub_job(domain):
             error_msg = "SubOver: " + str(e)
             scan_logger.error(error_msg, exc_info=True)
             final_error.append(error_msg)
-    
+
+    DB = SubDomainData(domain)
     DB.insert_domains(final_list)
     new_subs = DB.new_domains()
+    del DB
+    
 
     # Httprobe
     if config['TOOLS'].getboolean('httprobe'):
         try:
+            temp_file = tempfile.NamedTemporaryFile("w+t", encoding="utf-8", delete=False)
+            for item in new_subs:
+                temp_file.writelines(item + "\n")
+            temp_file.seek(0)
             http_probe = Httprobe(temp_file.name)
             data = http_probe.exec_command()
             alive_data = data['Httprobe']['data']
             https_domain = [dom.replace("https://","") for dom in alive_data if dom.startswith("https://")]
             http_domain = [dom.replace("http://","") for dom in alive_data if dom.startswith("http://")]
+            DB = SubDomainData(domain)
             DB.update_protocol("http", http_domain)
             DB.update_protocol("https", https_domain)
-            DB.Save()
+            del DB
         except Exception as e:
             error_msg = "Httprobe: " + str(e)
             scan_logger.error(error_msg, exc_info=True)
@@ -176,4 +183,5 @@ def get_subdomains(domain, protocol):
         subs = DB.read_domains_protocol("https")
     else:
         subs = DB.read_domains()
+    del DB
     return '\n'.join(subs)
