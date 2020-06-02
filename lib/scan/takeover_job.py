@@ -5,7 +5,11 @@ import tempfile
 from ..core.config import config
 from ..core.opp import SubOver
 from ..core.slack import push_slack
-from ..core.database import SubDomainData
+
+if config['DB']['name'] == "mysql":
+    from ..core.database_mysql import SubDomainData
+else:
+    from ..core.database import SubDomainData
 
 
 takeover_logger = logging.getLogger("takeover")

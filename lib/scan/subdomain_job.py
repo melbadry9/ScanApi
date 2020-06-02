@@ -5,11 +5,17 @@ import tempfile
 from ..core.utils import clean
 from ..core.config import config
 from ..core.slack import push_slack
-from ..core.database import SubDomainData
 from ..core.log_handler import scan_logger
 from ..thirdparty.Gasset.asset import main as Gasset
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
 from ..core.opp import SubOver, GoBuster, AssetFinder, Amass, GoBusterDNS, Httprobe, Findomain, Subfinder
+
+
+
+if config['DB']['name'] == "mysql":
+    from ..core.database_mysql import SubDomainData
+elif config['DB']['name'] == "sqlite3":
+    from ..core.database import SubDomainData
 
 
 def sub_job(domain):
