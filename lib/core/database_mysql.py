@@ -48,7 +48,7 @@ class SubDomainData():
         for item in sub_domain:
             if item not in self.old_sub:
                 try:
-                    self.cdb.execute("insert into domains (main_domain,sub_domain) values (%s,%s)",(self.domain,item))
+                    self.cdb.execute("insert ignore into domains (main_domain,sub_domain) values (%s,%s)",(self.domain,item))
                 except Exception as e:
                     database.error("Error while inserting in db\n {0}".format(e), stack_info=True)
         self.Save()

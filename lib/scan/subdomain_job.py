@@ -156,8 +156,9 @@ def sub_job(domain):
                 meta_data['subdomains'] = new_subs
 
     # Add Errors
-    if len(set(final_error) - {""}) > 0:
-        meta_data['errors'] = final_error
+    clean_errors = set(final_error) - {""}
+    if len(clean_errors) > 0:
+        meta_data['errors'] = list(clean_errors)
 
     # Slack Notification
     if config['SLACK'].getboolean('enabled'):

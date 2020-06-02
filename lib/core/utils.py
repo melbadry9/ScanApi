@@ -5,11 +5,12 @@ import validators
 utils_logger = logging.getLogger("utils")
 utils_logger.addHandler(logging.NullHandler())
 
-bad_char = ["~", "*", " "]
+bad_char = ["*.", " "]
 
 def clean(domains):
     new_domains = set()
     for dom in domains:
+        dom = dom.lower()
         if not validators.domain(dom):
             old_domain = dom
 
