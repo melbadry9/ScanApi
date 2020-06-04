@@ -63,6 +63,7 @@ docker run -d -p 8000:8000 scanapi
 - [Httprobe](https://github.com/tomnomnom/httprobe)
 - [Gobuster](https://github.com/OJ/gobuster)
 - [Assetfinder](https://github.com/tomnomnom/assetfinder)
+- [Chaos](https://github.com/projectdiscovery/chaos-client)
 
 ## To-Do list
 

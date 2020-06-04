@@ -8,7 +8,8 @@ go get -u github.com/melbadry9/subover;
 go get -u github.com/OJ/gobuster;
 go get -u github.com/tomnomnom/assetfinder;
 go get -u github.com/tomnomnom/httprobe;
-go get -u -v github.com/projectdiscovery/subfinder/cmd/subfinder;
+go get -u github.com/projectdiscovery/subfinder/cmd/subfinder;
+go get -u github.com/projectdiscovery/chaos-client/cmd/chaos
 wget https://github.com/OWASP/Amass/releases/download/v3.1.10/amass_v3.1.10_linux_amd64.zip;
 wget https://github.com/Edu4rdSHL/findomain/releases/latest/download/findomain-linux;
 chmod +x findomain-linux;

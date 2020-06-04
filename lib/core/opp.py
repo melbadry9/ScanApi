@@ -84,3 +84,10 @@ class Httprobe(ProcessBase):
         self.name = "Httprobe"
         self.command = "cat {0} | httprobe -c {1}".format(file, self.threads)
         self.pattern = r"(.+)\n"
+
+class Chaos(ProcessBase):
+    def __init__(self, domain):
+        ProcessBase.__init__(self)
+        self.name = "Chaos"
+        self.command = "chaos -silent -d {0} -key {1} ".format(domain,config['COOKIE']['chaos_key'])
+        self.pattern = r"(.+)\n"

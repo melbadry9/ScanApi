@@ -10,6 +10,7 @@ RUN go get -u github.com/OJ/gobuster
 RUN go get -u github.com/tomnomnom/assetfinder
 RUN go get -u github.com/tomnomnom/httprobe
 RUN go get -u -v github.com/projectdiscovery/subfinder/cmd/subfinder
+RUN go get -u github.com/projectdiscovery/chaos-client/cmd/chaos
 ENV GOROOT=/root/go GOPATH=/go PATH=/root/go/bin:$PATH
 RUN wget https://github.com/OWASP/Amass/releases/download/v3.1.10/amass_v3.1.10_linux_amd64.zip
 RUN wget https://github.com/Edu4rdSHL/findomain/releases/latest/download/findomain-linux

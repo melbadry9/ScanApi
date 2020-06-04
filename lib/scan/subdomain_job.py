@@ -8,7 +8,7 @@ from ..core.slack import push_slack
 from ..core.log_handler import scan_logger
 from ..thirdparty.Gasset.asset import main as Gasset
 from ..thirdparty.Sublist3r.sublist3r import main as Sublist3r
-from ..core.opp import SubOver, GoBuster, AssetFinder, Amass, GoBusterDNS, Httprobe, Findomain, Subfinder
+from ..core.opp import SubOver, GoBuster, AssetFinder, Amass, GoBusterDNS, Httprobe, Findomain, Subfinder, Chaos
 
 
 
@@ -90,6 +90,18 @@ def sub_job(domain):
             final_list.extend(data['Amass']['data'])
         except Exception as e:
             error_msg = "Amass: " + str(e)
+            scan_logger.error(error_msg, exc_info=True)
+            final_error.append(error_msg)
+
+    
+    # Chaos    
+    if config['TOOLS'].getboolean('chaos'):
+        try:
+            pro_chaos_finder = Chaos(domain)
+            data = pro_chaos_finder.exec_command()
+            final_list.extend(data['Chaos']['data'])
+        except Exception as e:
+            error_msg = "Chaos: " + str(e)
             scan_logger.error(error_msg, exc_info=True)
             final_error.append(error_msg)
 
