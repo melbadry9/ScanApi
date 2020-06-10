@@ -13,7 +13,7 @@ class SubDomainData():
         self.config = config['MYSQL']
 
         # connect to db
-        self.db = MySQLdb.connect(self.config['host'], self.config['user'], self.config['password'], self.config['db_name'], autocommit=False)
+        self.db = MySQLdb.connect(self.config['host'], self.config['user'], self.config['password'], self.config['db_name'], autocommit=True)
         self.cdb = self.db.cursor()
         
         # Create tables 
@@ -50,7 +50,7 @@ class SubDomainData():
                 try:
                     self.cdb.execute("insert ignore into domains (main_domain,sub_domain) values (%s,%s)",(self.domain,item))
                 except Exception as e:
-                    database.error("Error while inserting in db\n {0}".format(e), stack_info=True)
+                    database.error("[{1}::{2}] Error while inserting in db\n {0}".format(e,self.db,item), stack_info=True)
         self.Save()
 
     def read_domains(self):
