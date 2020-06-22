@@ -1,0 +1,7 @@
+Hello,
+
+It's @melbadry9 this is a proof of concept, Your S3 bucket has incorrect permissions.
+Please secure your s3 bucket before someone exploit it. 
+
+DM: https://twitter.com/_melbadry9
+H1: https://hackerone.com/melbadry9
