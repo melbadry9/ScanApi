@@ -1,6 +1,7 @@
-from .struct import SubDomainData
+from .struct import SubDomainData, delete_domain
 
 
 __dir__ = [
-    SubDomainData
+    SubDomainData,
+    delete_domain,
 ]

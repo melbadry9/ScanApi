@@ -6,4 +6,5 @@ urlpatterns = [
     path('db/<str:domain>/', views.db_domain, name="db_domain"),
     path('enum/passive/<str:domain>/', views.passive_enum_domain, name="passive_enum_domain"),
     path('enum/active/<str:domain>/', views.active_enum_domain, name="active_enum_domain"),
+    path('domain/delete/<str:domain>/', views.delete_db_domain, name="delete_db_domain"),    
 ]

@@ -4,7 +4,7 @@ from django.template import loader
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 
-from Enumeration.core.db import SubDomainData
+from Enumeration.core.db import SubDomainData, delete_domain
 from Enumeration.core.task import passive_domain, active_domain
 
 
@@ -49,4 +49,12 @@ def active_enum_domain(request, domain):
         "process_id": process_passive.pid,
         "passive": False,
         "active": True,
+        })
+
+def delete_db_domain(request, domain):
+    if request.method == "GET":
+        response = delete_domain(domain)
+    
+    return JsonResponse({
+        "response": response
         })
