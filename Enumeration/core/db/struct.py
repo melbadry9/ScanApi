@@ -65,6 +65,18 @@ class SubDomainData():
     def not_in_db(self, domains:list):
         return list(set(domains) - set(self.old_sub))
 
-def delete_domain(domain):
-    del_dom = Domain.objects.filter(name=domain)
-    return del_dom.delete()
+class DomainData():
+    def __init__(self, domain):
+        self.dom_str = domain
+        self.domain = Domain.objects.filter(name=domain)
+        
+    def delete_domain(self):
+        db_res = self.domain.delete()
+        Log_db.debug("{} - Deleted".format(self.dom_str))
+        return db_res
+
+    def info_domain(self):
+        return {
+            "domain": self.dom_str,
+            "count": Subdomain.objects.filter(domain=self.domain.get()).count(),
+            }
