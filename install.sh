@@ -18,6 +18,7 @@ go1.13.4 download;
 
 # Installing tools
 go1.13.4 get -u -v github.com/OJ/gobuster;
+go get github.com/cgboal/sonarsearch/crobat;
 go1.13.4 get -u -v github.com/melbadry9/enumsho;
 go1.13.4 get -u -v github.com/melbadry9/subover;
 go1.13.4 get -u -v github.com/tomnomnom/httprobe;

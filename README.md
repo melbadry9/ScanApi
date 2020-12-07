@@ -62,6 +62,7 @@ python3 manage.py runserver
 - [chaos](https://github.com/projectdiscovery/chaos-client)
 - [enumsho](https://github.com/melbadry9/enumsho)
 - [aiodnsbrute](https://github.com/blark/aiodnsbrute)
+- [crobat](https://github.com/cgboal/sonarsearch)
 
 ## Donation
 

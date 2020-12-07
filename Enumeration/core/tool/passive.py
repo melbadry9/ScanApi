@@ -43,3 +43,10 @@ class EnumShodan(BaseThreaded):
         self.tool_name = "shodan_enum"
         self.command = "enumsho -d {0} -s {1}".format(domain, ENUM_SHODAN['key'])
         self.pattern = r"(.+)\n"
+
+class Crobat(BaseThreaded):
+    def __init__(self, domain, shared, shared_error, errors):
+        BaseThreaded.__init__(self, domain, shared, shared_error, errors)
+        self.tool_name = "crobat"
+        self.command = "crobat -s {0}".format(domain)
+        self.pattern = r"(.+)\n"

@@ -1,9 +1,10 @@
 from Enumeration.core.lib import SubList3r, Qenum, GitEnum
-from Enumeration.core.tool import Amass, AssetFinder, Findomain, Chaos, Subfinder, EnumShodan, AioDNS, GoBusterDNS
+from Enumeration.core.tool import Amass, AssetFinder, Findomain, Chaos, Subfinder, EnumShodan, AioDNS, GoBusterDNS, Crobat
 
 
 PASSIVE_TOOLS = [
     #Qenum,
+    Crobat,
     Chaos,
     Amass,
     GitEnum,
