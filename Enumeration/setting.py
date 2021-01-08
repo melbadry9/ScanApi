@@ -2,10 +2,6 @@ from Enumeration.core.util import dir_folder, dns_folder, yaml_folder
 
 
 # tools Configuration
-GASSET = {
-    "fb_cookie": ""
-}
-
 CHAOS = {
     "key": "",
 }

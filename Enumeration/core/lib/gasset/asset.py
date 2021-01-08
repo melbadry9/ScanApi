@@ -11,8 +11,6 @@ from urllib.parse import quote
 import requests
 from bs4 import BeautifulSoup as BS
 
-from Enumeration.setting import GASSET
-
 asset_logger = logging.getLogger('core.lib.gasset')
 asset_logger.addHandler(logging.NullHandler())
 
@@ -32,7 +30,7 @@ class Base(object):
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
             'Accept-Language': 'en-US,en;q=0.8',
             'Accept-Encoding': 'gzip',
-            'Cookie': GASSET['fb_cookie']}
+            'Cookie': ''}
         self.fb_url = "https://developers.facebook.com/tools/debug/echo/?q={proxy_url}"
         self.adapter = requests.adapters.HTTPAdapter(5, 10, max_retries=2)
         self.CreateSession()
@@ -93,6 +91,29 @@ class BaseThreaded(multiprocessing.Process, Base):
         asset_logger.debug("{0}: Enumerating finished".format(self.name))
         
 #children of enumeration sites
+class Kenz(BaseThreaded):
+    def __init__(self, domain, shared=None):
+        BaseThreaded.__init__(self, domain, shared)
+        self.BASE_URL = "http://vps.melbadry9.xyz/huntdb/directory/{domain}/subenum.kenz"
+        self.url = self.BASE_URL.format(domain=domain)
+
+    def SendRequest(self, url):
+        return self.session.get(url, stream=True, timeout=50)
+    
+    def HandleResponse(self, res):
+        sc = res.status_code 
+        res = res.text
+        if sc == 200:
+            regex = r"(.+)\n"
+            subdom = re.findall(regex, res)
+            for subdomain in subdom:
+                subdomain = subdomain.replace("*.","")
+                self.domains.append(subdomain)
+            self.done = True
+            return True
+        else:
+            return False
+
 class Crt(BaseThreaded):
     def __init__(self, domain, shared=None):
         BaseThreaded.__init__(self, domain, shared)
@@ -234,23 +255,28 @@ class CertSpotter(BaseThreaded):
             return False
 
 def main(domain):
-    subdomains_final = multiprocessing.Manager().list()
+    subdomains_final = multiprocessing.Manager().list()   
+#    if not GASSET['fb_cookie'] == "":
+#        active_resources = [Crt, FDNS, VirusTotal, CertSpotter, Censys]
+#    else:
+#        asset_logger.error("Facebook cookies not found ignoring Censys, VirusTotal")
+#        active_resources = [Crt, FDNS, CertSpotter]
     
-    if not GASSET['fb_cookie'] == "":
-        active_resources = [Crt, FDNS, VirusTotal, CertSpotter, Censys]
-    else:
-        asset_logger.error("Facebook cookies not found ignoring Censys, VirusTotal")
-        active_resources = [Crt, FDNS, CertSpotter]
-
+    active_resources = [Kenz]
     threads = [resource(domain, subdomains_final) for resource in active_resources]
+    
     for thread in threads:
         thread.start()
+    
     for thread in threads:
-        thread.join()
+        try:
+            thread.join()
+        except:
+            pass
     
     subdomains_final = sorted(set(subdomains_final))
-    #for sub in subdomains_final:
-    #    print(sub)
+    for sub in subdomains_final:
+        print(sub)
     
     return subdomains_final
 
