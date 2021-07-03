@@ -4,15 +4,15 @@ from Enumeration.core.tool import Amass, AssetFinder, Findomain, Chaos, Subfinde
 
 PASSIVE_TOOLS = [
     #Qenum,
-    Crobat,
+    #Crobat,
     Chaos,
     Amass,
-    GitEnum,
+    #GitEnum,
     SubList3r,
     Findomain,
     Subfinder,
     AssetFinder,
-    EnumShodan,
+    #EnumShodan,
 ]
 
 ACTIVE_TOOLS = [

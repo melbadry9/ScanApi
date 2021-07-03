@@ -1,4 +1,3 @@
-import tempfile
 from datetime import datetime as dt
 from Enumeration.setting import AWS, SLACK
 from Enumeration.core.util import push_slack, temp_file

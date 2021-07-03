@@ -32,21 +32,29 @@ python3 manage.py runserver
 ## Endpoints  
 
 1. `/enum/active/<domain>/`
-    - Start subdomain enumeration task in background then update db using active tools
+    - Start subdomain enumeration task in background then update DB using active tools
     - Domain ex: `example.com`
 
 2. `/enum/passive/<domain>/`
-    - Start subdomain enumeration task in background then update db using passive tools
+    - Start subdomain enumeration task in background then update DB using passive tools
     - Domain ex: `example.com`
 
 3. `/db/<domain>/`
     - Retrieve all subdomains from db if any exist
 
 4. `/db/<domain>/?pro=http`
-    - Retrieve subdomains with port 80 opened from db if any exist
+    - Retrieve subdomains with port 80 opened from DB if any exist
 
 5. `/db/<domain>/?pro=https`
-    - Retrieve subdomains with port 443 opened from db if any exist
+    - Retrieve subdomains with port 443 opened from DB if any exist
+
+6. `/domain/info/<domain>/`
+    - Retrieve domain information from DB
+    - Domain ex: `example.com`
+
+7. `/domain/delete/<domain>/`
+    - Delete domain from DB
+    - Domain ex: `example.com`
 
 ## Supported Tools
 
