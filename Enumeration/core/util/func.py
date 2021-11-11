@@ -9,7 +9,7 @@ def check_domain(domains:list):
         av_dom = av_dom.lower().replace("*.","")
         if validators.domain(av_dom):
             domains_copy.add(av_dom)
-    return list(domains_copy)
+    return domains_copy
 
 def prevent_attack(domain:str):
     domain = domain.replace(" ", "")

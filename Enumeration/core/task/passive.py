@@ -25,7 +25,7 @@ def passive_domain(domain:str, commit=True):
             thread.join()
 
         # Check vaild domains
-        final_list = check_domain(set(final_list))
+        final_list = check_domain(final_list)
         clean_errors = set(final_error) - {""}
 
         # Push to db, aws and slack

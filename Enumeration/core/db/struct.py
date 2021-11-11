@@ -1,5 +1,6 @@
 import logging
 from django.db import transaction
+from itertools import islice, chain
 from Enumeration.models import Domain, Subdomain
 
 
@@ -23,14 +24,13 @@ class SubDomainData():
         self.new_sub = []
         self.old_sub = self.read_domains()
         
-    @transaction.atomic
-    def insert_domains(self, domains:list):
+    def insert_domains(self, domains:set):
         """ Insert sub-domains if not exists in the db """
 
         self.new_sub = self.not_in_db(domains)
-        to_insert_subs = [Subdomain(name=domain, domain=self.domain) for domain in self.new_sub]
-        Log_db.debug("{} - Insterting subdomains".format(self.dom_str))
-        with transaction.atomic():
+        Log_db.debug("{} - Insterting {} subdomains".format(self.dom_str, len(self.new_sub)))
+        for batch in self.split(self.new_sub, 20000):
+            to_insert_subs = [Subdomain(name=domain, domain=self.domain) for domain in batch]
             Subdomain.objects.bulk_create(to_insert_subs, ignore_conflicts=True)
         Log_db.info("{} - {} Subdomains inserted".format(self.dom_str, len(self.new_sub)))
 
@@ -39,7 +39,7 @@ class SubDomainData():
 
         return [sub.name for sub in Subdomain.objects.filter(domain=self.domain)]
 
-    def update_scheme(self, scheme:str, domains:list):
+    def update_scheme(self, scheme:str, domains:set):
         """ Update http or https scheme status """
 
         Log_db.debug("{} - Updating live servers".format(self.dom_str))
@@ -62,9 +62,19 @@ class SubDomainData():
         else:
             return []
     
-    def not_in_db(self, domains:list):
-        return list(set(domains) - set(self.old_sub))
+    def not_in_db(self, domains:set):
+        return list(domains - set(self.old_sub))
 
+    @staticmethod
+    def split(iterable, size):
+        try:
+            sourceiter = iter(iterable)
+            while True:
+                batchiter = islice(sourceiter, size)
+                yield chain([batchiter.__next__()], batchiter)
+        except StopIteration:
+            pass
+    
 class DomainData():
     def __init__(self, domain):
         self.dom_str = domain
