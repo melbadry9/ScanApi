@@ -1,6 +1,8 @@
 from Enumeration.core.util import dir_folder, dns_folder, yaml_folder
 
 
+WildDetection = True 
+
 # tools Configuration
 CHAOS = {
     "key": "",
@@ -33,6 +35,10 @@ ENUM_GIT = {
     "key": ""
 }
 
+DNSX = {
+    "wild_num": "15",
+    "threads": "250"
+}
 
 # Access keys and webhooks
 SLACK = {
