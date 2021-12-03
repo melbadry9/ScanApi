@@ -16,7 +16,6 @@ RUN rm ./logs/*
 COPY ./scanapi_apache.conf /etc/apache2/sites-available/scanapi.conf
 RUN a2ensite scanapi
 RUN a2dissite 000-default
-RUN service apache2 restart
 
 ENV GOPATH=$HOME/go
 ENV PATH=$PATH:${GOPATH}/bin
@@ -42,3 +41,5 @@ RUN mv findomain-linux ${GOPATH}/bin/findomain
 RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.15.2/amass_linux_amd64.zip
 RUN unzip -j amass_linux_amd64.zip amass_linux_amd64/amass -d ${GOPATH}/bin/
 RUN rm amass_linux_amd64.zip
+
+CMD ["/usr/sbin/apachectl", "-D", "FOREGROUND"]
