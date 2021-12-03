@@ -4,6 +4,15 @@ Subdomains-enumeration, subdomain-takeover monitoring api and S3 bucket scanner.
 
 ## Installing
 
+### Docker with already configured DB
+
+```bash
+sudo docker build -t scanapi:alpha .
+docker run -d -p 80:80 -t scanapi:alpha
+```
+
+### Clean installion
+
 - Download and install
 
  ```bash
