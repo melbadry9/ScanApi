@@ -1,5 +1,5 @@
 from Enumeration.core.lib import SubList3r, Qenum, GitEnum
-from Enumeration.core.tool import Amass, AssetFinder, Findomain, Chaos, Subfinder, EnumShodan, AioDNS, GoBusterDNS, Crobat, DnsxFilter
+from Enumeration.core.tool import Amass, AssetFinder, Findomain, Chaos, Subfinder, EnumShodan, AioDNS, GoBusterDNS, Crobat, DnsxFilter, DnsxBrute
 
 
 PASSIVE_TOOLS = [
@@ -11,12 +11,13 @@ PASSIVE_TOOLS = [
     SubList3r,
     Findomain,
     Subfinder,
-    AssetFinder,
+#    AssetFinder,
     #EnumShodan,
 ]
 
 ACTIVE_TOOLS = [
-    AioDNS,
+    #AioDNS,
+    DnsxBrute,
     #GoBusterDNS,
 ]
 

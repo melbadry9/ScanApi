@@ -40,6 +40,11 @@ DNSX = {
     "threads": "250"
 }
 
+DNSX_BRUTE = {
+    "threads": "250",
+    "wordlist": dns_folder("small_dns.txt"),
+}
+
 # Access keys and webhooks
 SLACK = {
     "report_hook": ""

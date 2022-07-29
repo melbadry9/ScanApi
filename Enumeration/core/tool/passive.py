@@ -27,7 +27,7 @@ class Subfinder(BaseThreaded):
     def __init__(self, domain, shared, shared_error, errors):
         BaseThreaded.__init__(self, domain, shared, shared_error, errors)
         self.tool_name = "subfinder"
-        self.command = "subfinder -d {0} -silent".format(domain)
+        self.command = "subfinder -d {0} -silent -all".format(domain)
         self.pattern = r"(.+)\n"    
 
 class Chaos(BaseThreaded):

@@ -1,5 +1,5 @@
 from .base import BaseThreaded
-from Enumeration.setting import GOBUSTER, AIODNSBRUTE, DNSX
+from Enumeration.setting import GOBUSTER, AIODNSBRUTE, DNSX, DNSX_BRUTE
 
 
 class GoBusterDNS(BaseThreaded):
@@ -21,4 +21,11 @@ class DnsxFilter(BaseThreaded):
         BaseThreaded.__init__(self, domain, shared, shared_error, errors)
         self.tool_name = "dnsx"
         self.command = "cat {} | dnsx -wt {} -t {} -wd {} -silent".format(file_location, DNSX["wild_num"], DNSX["threads"], domain)
+        self.pattern = r"(.+)\n"
+
+class DnsxBrute(BaseThreaded):
+    def __init__(self, domain, shared, shared_error, errors, file_location):
+        BaseThreaded.__init__(self, domain, shared, shared_error, errors)
+        self.tool_name = "dnsx"
+        self.command = "dnsx -t {} -w {} -d {} -silent".format(DNSX_BRUTE["threads"], DNSX["wordlist"], domain)
         self.pattern = r"(.+)\n"
