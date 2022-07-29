@@ -25,20 +25,20 @@ RUN go1.17 download
 
 RUN go get -v github.com/melbadry9/enumsho
 RUN go1.17 get -v github.com/cgboal/sonarsearch/cmd/crobat
-RUN go1.17 get -v github.com/tomnomnom/assetfinder
-RUN go1.17 get -v github.com/tomnomnom/httprobe
-RUN go1.17 get -v github.com/melbadry9/subover
-RUN go1.17 install github.com/OJ/gobuster/v3@latest
+RUN go1.17 install -v github.com/tomnomnom/httprobe@latest
+RUN go1.17 install -v github.com/tomnomnom/assetfinder@latest
+RUN go1.17 install -v github.com/melbadry9/subover@latest
+RUN go1.17 install -v github.com/OJ/gobuster/v3@latest
 RUN go1.17 install -v github.com/projectdiscovery/dnsx/cmd/dnsx@latest
 RUN go1.17 install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
 RUN go1.17 install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-RUN GO111MODULE=on go1.17 get -v github.com/projectdiscovery/chaos-client/cmd/chaos
+RUN go1.17 install -v github.com/projectdiscovery/chaos-client/cmd/chaos@latest
 
 RUN wget --quiet https://github.com/Edu4rdSHL/findomain/releases/latest/download/findomain-linux
 RUN chmod +x findomain-linux
 RUN mv findomain-linux ${GOPATH}/bin/findomain
 
-RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.15.2/amass_linux_amd64.zip
+RUN wget --quiet https://github.com/OWASP/Amass/releases/download/v3.19.3/amass_linux_amd64.zip
 RUN unzip -j amass_linux_amd64.zip amass_linux_amd64/amass -d ${GOPATH}/bin/
 RUN rm amass_linux_amd64.zip
 
