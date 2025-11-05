@@ -24,7 +24,7 @@ def db_domain(request, domain):
 
     return JsonResponse({
         "domain": domain,
-        "sub_domains": subdomains
+        "subdomains": subdomains
     })
 
 def passive_enum_domain(request, domain):

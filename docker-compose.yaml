@@ -1,0 +1,46 @@
+services:
+  db:
+    image: mariadb:11.4
+    container_name: scanapi_db
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+    command: >
+      mariadbd
+      --net_read_timeout=300
+      --net_write_timeout=300
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - scanapi_net
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scanapi_web
+    restart: always
+    ports:
+      - "80:80"
+    environment:
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    depends_on:
+      - db
+    networks:
+      - scanapi_net
+
+volumes:
+  db_data:
+
+networks:
+  scanapi_net:
+    driver: bridge

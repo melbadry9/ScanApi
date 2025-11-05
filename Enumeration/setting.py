@@ -1,7 +1,7 @@
 from Enumeration.core.util import dir_folder, dns_folder, yaml_folder
 
 
-WildDetection = True 
+WildDetection = False 
 
 # tools Configuration
 CHAOS = {

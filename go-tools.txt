@@ -1,0 +1,7 @@
+github.com/tomnomnom/httprobe@latest
+github.com/tomnomnom/assetfinder@latest
+github.com/melbadry9/subover@latest
+github.com/projectdiscovery/dnsx/cmd/dnsx@latest
+github.com/projectdiscovery/httpx/cmd/httpx@latest
+github.com/projectdiscovery/chaos-client/cmd/chaos@latest
+github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest

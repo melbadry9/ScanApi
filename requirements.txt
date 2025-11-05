@@ -40,3 +40,4 @@ urllib3==1.25.9
 uvloop==0.14.0
 validators==0.15.0
 wrapt==1.12.1
+gunicorn==20.1.0

@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '7o@35dmkigy&#g8*o&oe930jn0c8(@u5$9%dsz_sc1^dgfffna'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # SECURITY WARNING: set hostname. 
 ALLOWED_HOSTS = ['*']
@@ -84,12 +84,15 @@ WSGI_APPLICATION = 'ScanApi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.environ.get('MYSQL_DATABASE', 'scanapi'),
+        'USER': os.environ.get('MYSQL_USER', 'scanapi'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'scanapi_pass'),
+        'HOST': os.environ.get('MYSQL_HOST', 'db'),  # 👈 The Compose service name
+        'PORT': os.environ.get('MYSQL_PORT', '3306'),
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+        }
     }
 }
 
