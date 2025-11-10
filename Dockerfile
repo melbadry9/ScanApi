@@ -109,7 +109,7 @@ EXPOSE 80
 # ---------------------------
 # Start the application
 # ---------------------------
-CMD ["sh", "-c", "\
+CMD ["sh", "-c", "sleep 2 && \
     python3 manage.py makemigrations && \
     python3 manage.py sqlmigrate Enumeration 0001 && \
     python3 manage.py migrate && \
