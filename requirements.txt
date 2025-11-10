@@ -41,3 +41,4 @@ uvloop==0.14.0
 validators==0.15.0
 wrapt==1.12.1
 gunicorn==20.1.0
+aiohttp==3.7.4

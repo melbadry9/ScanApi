@@ -1,24 +1,20 @@
-from Enumeration.core.lib import SubList3r, Qenum, GitEnum
-from Enumeration.core.tool import Amass, AssetFinder, Findomain, Chaos, Subfinder, EnumShodan, AioDNS, GoBusterDNS, Crobat, DnsxFilter, DnsxBrute
+from Enumeration.core.lib import SubList3r, RiftEnum
+from Enumeration.core.tool import Amass, AssetFinder, Findomain, Chaos, Subfinder, AioDNS, DnsxFilter, DnsxBrute
 
 
 PASSIVE_TOOLS = [
-#    Qenum,
-#    Crobat,
     Chaos,
     Amass,
-#    GitEnum,
     SubList3r,
     Findomain,
     Subfinder,
-#    AssetFinder,
-    #EnumShodan,
+    AssetFinder,
+    RiftEnum
 ]
 
 ACTIVE_TOOLS = [
     #AioDNS,
     DnsxBrute,
-    #GoBusterDNS,
 ]
 
 WILD_TOOLS = [

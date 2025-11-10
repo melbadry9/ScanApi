@@ -1,5 +1,5 @@
 from .base import BaseThreaded
-from Enumeration.setting import CHAOS, ENUM_SHODAN
+from Enumeration.setting import CHAOS
 
 
 class AssetFinder(BaseThreaded):
@@ -37,16 +37,3 @@ class Chaos(BaseThreaded):
         self.command = "chaos -silent -d {0} -key {1} ".format(domain, CHAOS['key'])
         self.pattern = r"(.+)\n"
         
-class EnumShodan(BaseThreaded):
-    def __init__(self, domain, shared, shared_error, errors):
-        BaseThreaded.__init__(self, domain, shared, shared_error, errors)
-        self.tool_name = "shodan_enum"
-        self.command = "enumsho -d {0} -s {1}".format(domain, ENUM_SHODAN['key'])
-        self.pattern = r"(.+)\n"
-
-class Crobat(BaseThreaded):
-    def __init__(self, domain, shared, shared_error, errors):
-        BaseThreaded.__init__(self, domain, shared, shared_error, errors)
-        self.tool_name = "crobat"
-        self.command = "crobat -s {0}".format(domain)
-        self.pattern = r"(.+)\n"

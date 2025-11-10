@@ -4,12 +4,10 @@ from Enumeration.core.util import dir_folder, dns_folder, yaml_folder
 WildDetection = False 
 
 # tools Configuration
+SHODAN_API_KEY = ""
+
 CHAOS = {
     "key": "",
-}
-
-SUBOVER = {
-    "threads": "30",
 }
 
 GOBUSTER = {
@@ -27,14 +25,6 @@ NUCLEI_TAKEOVER = {
     "template": yaml_folder("all-takeover.yaml"),
 }
 
-ENUM_SHODAN = {
-    "key": ""
-}
-
-ENUM_GIT = {
-    "key": ""
-}
-
 DNSX = {
     "wild_num": "15",
     "threads": "250"
@@ -48,11 +38,4 @@ DNSX_BRUTE = {
 # Access keys and webhooks
 SLACK = {
     "report_hook": ""
-}
-
-AWS = {
-    "id": "",
-    "secret": "",
-    "upload": False,
-    "upload_bucket": "",
 }
