@@ -22,22 +22,22 @@ class SubDomainData():
 
         # Read subdomains from db
         self.new_sub = []
-        self.old_sub = self.read_domains()
+        # self.old_sub = self.read_domains()
         
     def insert_domains(self, domains:set):
         """ Insert sub-domains if not exists in the db """
 
-        self.new_sub = self.not_in_db(domains)
+        self.new_sub = domains
         Log_db.debug("{} - Insterting {} subdomains".format(self.dom_str, len(self.new_sub)))
         for batch in self.split(self.new_sub, 20000):
             to_insert_subs = [Subdomain(name=domain, domain=self.domain) for domain in batch]
-            Subdomain.objects.bulk_create(to_insert_subs, ignore_conflicts=True)
+            Subdomain.objects.bulk_create(to_insert_subs, batch_size=20000, ignore_conflicts=True)
         Log_db.info("{} - {} Subdomains inserted".format(self.dom_str, len(self.new_sub)))
 
     def read_domains(self):
         """ Get sub-domains from db """
-
-        return [sub.name for sub in Subdomain.objects.filter(domain=self.domain)]
+        return list(self.domain.subdomain_set.values_list('name', flat=True))
+        # return [sub.name for sub in Subdomain.objects.filter(domain=self.domain)]
 
     def update_scheme(self, scheme:str, domains:set):
         """ Update http or https scheme status """

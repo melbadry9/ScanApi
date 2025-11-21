@@ -10,9 +10,13 @@ services:
       - MARIADB_PASSWORD=${MARIADB_PASSWORD}
     command: >
       mariadbd
-      --net_read_timeout=500
-      --net_write_timeout=500
+      --net_read_timeout=3600
+      --net_write_timeout=3600
+      --wait_timeout=3600
+      --interactive_timeout=3600
       --max_allowed_packet=256M
+      --log_warnings=2
+
     volumes:
       - db_data:/var/lib/mysql
     ports:
